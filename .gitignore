@@ -1,0 +1,7 @@
+.env
+.venv/
+venv/
+__pycache__/
+*.pyc
+sikaphub_ai_engine.code-workspace
+sikaphub_ai_engine/logs/
