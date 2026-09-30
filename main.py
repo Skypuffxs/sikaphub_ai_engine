@@ -25,6 +25,17 @@ permit_verifier = BusinessPermitVerifier()
 app = FastAPI(title="S.I.K.A.P. Hub AI Engine", version=ENGINE_VERSION)
 
 
+@app.get("/")
+@app.get("/health")
+async def health_check():
+    return {
+        "status": "ok",
+        "service": "SIKAPHUB AI Engine",
+        "version": ENGINE_VERSION
+    }
+
+
+
 # --- PYDANTIC MODELS ---
 class JobRequiredSkill(BaseModel):
     skill_id: int
