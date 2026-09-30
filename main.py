@@ -10,6 +10,11 @@ from dotenv import load_dotenv
 from matching_engine import compute_pair_match, ENGINE_VERSION
 from resume_parser import parse_resume_to_profile
 from business_verifier import BusinessPermitVerifier
+from candidate_feedback import (
+    CandidateFeedbackRequest,
+    CandidateFeedbackResponse,
+    generate_candidate_feedback,
+)
 
 load_dotenv()
 HMAC_SECRET = os.getenv("HMAC_SECRET", "")
@@ -200,5 +205,23 @@ async def verify_business_permit(
         expected_owner_name=expected_owner_name
     )
     return res
+
+
+@app.post(
+    "/api/candidate-feedback",
+    response_model=CandidateFeedbackResponse,
+    dependencies=[Depends(verify_bearer_and_hmac)],
+)
+@app.post(
+    "/api/v1/candidate-feedback",
+    response_model=CandidateFeedbackResponse,
+    dependencies=[Depends(verify_bearer_and_hmac)],
+)
+async def analyze_candidate_feedback(payload: CandidateFeedbackRequest):
+    """
+    Generate comparative, individualized AI feedback and candidate breakdown
+    for job applicants tied or close in match score under a specific job posting.
+    """
+    return generate_candidate_feedback(payload)
 
 
